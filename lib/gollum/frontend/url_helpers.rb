@@ -55,6 +55,10 @@ module Precious
       url_for_action_name('revert', escaped_name)
     end
 
+    def preview_url
+      url('preview')
+    end
+
     def base_url
       url('/')
     end
