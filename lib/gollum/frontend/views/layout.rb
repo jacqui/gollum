@@ -7,6 +7,9 @@ module Precious
       include Precious::UrlHelpers
       alias_method :h, :escape_html
 
+      # without this, the url helpers don't work in some rails apps due to: voodoo
+      attr_accessor :request
+
       attr_reader :name
 
       def escaped_name
