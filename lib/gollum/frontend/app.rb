@@ -3,11 +3,13 @@ require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
 
+require 'gollum/frontend/url_helpers'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
 module Precious
   class App < Sinatra::Base
+    include Precious::UrlHelpers
     register Mustache::Sinatra
 
     dir = File.dirname(File.expand_path(__FILE__))
@@ -66,7 +68,7 @@ module Precious
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
 
-      redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
+      redirect show_url(CGI.escape(Gollum::Page.cname(name)))
     end
 
     post '/create' do
@@ -77,7 +79,7 @@ module Precious
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{CGI.escape(name)}"
+        redirect show_url(CGI.escape(name))
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -93,7 +95,7 @@ module Precious
       sha2  = shas.shift
 
       if wiki.revert_page(@page, sha1, sha2, commit_message)
-        redirect "/#{CGI.escape(@name)}"
+        redirect show_url(CGI.escape(@name))
       else
         sha2, sha1 = sha1, "#{sha1}^" if !sha2
         @versions = [sha1, sha2]
@@ -125,12 +127,10 @@ module Precious
     post '/compare/:name' do
       @versions = params[:versions] || []
       if @versions.size < 2
-        redirect "/history/#{CGI.escape(params[:name])}"
+        redirect history_url(CGI.escape(params[:name]))
       else
-        redirect "/compare/%s/%s...%s" % [
-          CGI.escape(params[:name]),
-          @versions.last,
-          @versions.first]
+        redirect compare_versions_url(CGI.escape(params[:name]), @versions.last, @versions.first)
+#        redirect "/compare/%s/%s...%s" % [
       end
     end
 
@@ -165,14 +165,14 @@ module Precious
     get '/search' do
       @query = params[:q]
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @results = wiki.search @query
+      @results = wiki.search(@query).map { |result| { :name => result[:name], :url => show_url(result[:name]) } }
       @name = @query
       mustache :search
     end
 
     get '/pages' do
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @results = wiki.pages
+      @results = wiki.pages.map { |page| { :name => page.name, :url => show_url(page.name) } }
       @ref = wiki.ref
       mustache :pages
     end
