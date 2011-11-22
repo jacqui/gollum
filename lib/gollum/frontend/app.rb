@@ -39,10 +39,6 @@ module Precious
       enable :logging, :raise_errors, :dump_errors
     end
 
-    get '/' do
-      show_page_or_file('Home')
-    end
-
     get '/edit/*' do
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
@@ -166,11 +162,13 @@ module Precious
       mustache :search
     end
 
-    get '/pages' do
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @results = wiki.pages.map { |page| { :name => page.name, :url => show_url(page.name) } }
-      @ref = wiki.ref
-      mustache :pages
+    ['/','/pages'].each do |route|
+      get route do
+        wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+        @results = wiki.pages.map { |page| { :name => page.name, :url => show_url(page.name) } }
+        @ref = wiki.ref
+        mustache :pages
+      end
     end
 
     get %r{(/(javascripts|stylesheets|images)/.+)} do
