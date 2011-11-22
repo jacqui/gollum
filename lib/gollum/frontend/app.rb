@@ -144,10 +144,6 @@ module Precious
       mustache :compare
     end
 
-    get %r{^/(javascript|css|images)} do
-      halt 404
-    end
-
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
@@ -175,6 +171,11 @@ module Precious
       @results = wiki.pages.map { |page| { :name => page.name, :url => show_url(page.name) } }
       @ref = wiki.ref
       mustache :pages
+    end
+
+    get %r{(/(javascripts|stylesheets|images)/.+)} do
+      local_path = File.join(File.dirname(__FILE__), 'public', params[:captures].first)
+      send_file local_path
     end
 
     get '/*' do
