@@ -85,6 +85,7 @@ module Gollum
     # Returns nothing (modifies the Index in place).
     def add_to_index(dir, name, format, data, allow_same_ext = false)
       path = @wiki.page_file_name(name, format)
+      ext = @wiki.page_class.format_to_ext(format)
 
       dir = '/' if dir.strip.empty?
 
