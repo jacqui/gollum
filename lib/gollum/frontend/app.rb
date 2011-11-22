@@ -175,7 +175,11 @@ module Precious
 
     get %r{(/(javascripts|stylesheets|images)/.+)} do
       local_path = File.join(File.dirname(__FILE__), 'public', params[:captures].first)
-      send_file local_path
+
+      # Determine the content type - code cribbed from sinatra's send_file in v1.2.6
+      content_type(Rack::Mime::MIME_TYPES[File.extname(local_path)])
+      # Send the contents directly - send_file requires X-Sendfile support in Apache
+      File.read(local_path)
     end
 
     get '/*' do
