@@ -157,7 +157,7 @@ module Precious
     get '/search' do
       @query = params[:q]
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @results = wiki.search(@query).map { |result| { :name => result[:name], :url => show_url(result[:name]) } }
+      @results = wiki.search(@query).map { |result| { :count => result[:count], :name => result[:name], :url => show_url(result[:name]) } }
       @name = @query
       mustache :search
     end
