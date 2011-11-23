@@ -1,6 +1,17 @@
 gollum -- A wiki built on top of Git
 ====================================
 
+## NOTE: DO NOT USE THIS FORK!
+## (w/o reviewing the changes at least!)
+
+This fork of the awesome gollum repo is very much a work-in-progress.
+It contains changes that we needed and/or wanted for our very particular
+use case at the NYT. Some of these changes might be worthy of a pull request,
+after some polish & testing, but many are departures from the intended 
+feature set of gollum. How to manage those changes is TBD.
+
+The rest of the gollum README now follows... thank you!
+
 ## DESCRIPTION
 
 Gollum is a simple wiki system built on top of Git that powers GitHub Wikis.
