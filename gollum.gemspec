@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '1.3.1.nyt'
-  s.date              = '2011-11-22'
+  s.date              = '2011-11-23'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -454,7 +454,6 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/stylesheets/gollum/editor.css
     lib/gollum/frontend/public/stylesheets/gollum/gollum.css
     lib/gollum/frontend/public/stylesheets/gollum/ie7.css
-    lib/gollum/frontend/public/stylesheets/gollum/syntax.css
     lib/gollum/frontend/public/stylesheets/gollum/template.css
     lib/gollum/frontend/templates/compare.mustache
     lib/gollum/frontend/templates/create.mustache
