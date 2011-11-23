@@ -19,7 +19,7 @@ require File.expand_path('../gollum/markup', __FILE__)
 require File.expand_path('../gollum/sanitization', __FILE__)
 
 module Gollum
-  VERSION = '1.3.1.nyt'
+  VERSION = '1.3.1.nyt1'
 
   class Error < StandardError; end
 
